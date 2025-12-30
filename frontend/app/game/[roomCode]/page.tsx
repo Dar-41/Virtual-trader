@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket'
 import Chart from '@/components/Chart'
 import Leaderboard from '@/components/Leaderboard'
-import { QRCodeSVG } from 'react-qr-code'
+import QRCode from 'react-qr-code'
 
 interface Position {
   symbol: string
@@ -37,7 +37,7 @@ export default function GamePage() {
   const searchParams = useSearchParams()
   const roomCode = params.roomCode as string
   const playerName = searchParams.get('name') || 'Player'
-  
+
   const [balance, setBalance] = useState(500000)
   const [positions, setPositions] = useState<Position[]>([])
   const [chartData, setChartData] = useState<CandleData[]>([])
@@ -74,7 +74,7 @@ export default function GamePage() {
         setChartData((prev) => {
           const newData = [...prev]
           const lastCandle = newData[newData.length - 1]
-          
+
           if (lastCandle && lastCandle.time === data.time) {
             lastCandle.high = Math.max(lastCandle.high, data.price)
             lastCandle.low = Math.min(lastCandle.low, data.price)
@@ -94,16 +94,16 @@ export default function GamePage() {
           }
         })
       }
-      
+
       // Update positions with new price
       setPositions((prev) =>
         prev.map((pos) =>
           pos.symbol === data.symbol
             ? {
-                ...pos,
-                currentPrice: data.price,
-                pnl: (data.price - pos.avgPrice) * pos.quantity,
-              }
+              ...pos,
+              currentPrice: data.price,
+              pnl: (data.price - pos.avgPrice) * pos.quantity,
+            }
             : pos
         )
       )
@@ -150,7 +150,7 @@ export default function GamePage() {
 
   const handleTrade = (type: 'buy' | 'sell' | 'short' | 'cover') => {
     if (!selectedSymbol || !quantity || gameStatus !== 'active') return
-    
+
     const qty = parseInt(quantity)
     if (isNaN(qty) || qty <= 0) return
 
@@ -201,11 +201,10 @@ export default function GamePage() {
                     <button
                       key={stock}
                       onClick={() => setSelectedSymbol(stock)}
-                      className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                        selectedSymbol === stock
+                      className={`px-4 py-2 rounded-lg font-semibold transition-all ${selectedSymbol === stock
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                      }`}
+                        }`}
                     >
                       {stock}
                     </button>
@@ -303,9 +302,8 @@ export default function GamePage() {
                             ₹{pos.currentPrice.toFixed(2)}
                           </td>
                           <td
-                            className={`text-right py-2 text-sm font-semibold ${
-                              pos.pnl >= 0 ? 'text-profit' : 'text-loss'
-                            }`}
+                            className={`text-right py-2 text-sm font-semibold ${pos.pnl >= 0 ? 'text-profit' : 'text-loss'
+                              }`}
                           >
                             {pos.pnl >= 0 ? '+' : ''}₹{pos.pnl.toFixed(2)}
                           </td>
@@ -333,9 +331,8 @@ export default function GamePage() {
                 <div className="flex justify-between">
                   <span className="text-gray-600">P&L:</span>
                   <span
-                    className={`font-semibold ${
-                      totalPnL >= 0 ? 'text-profit' : 'text-loss'
-                    }`}
+                    className={`font-semibold ${totalPnL >= 0 ? 'text-profit' : 'text-loss'
+                      }`}
                   >
                     {totalPnL >= 0 ? '+' : ''}
                     ₹{totalPnL.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -344,9 +341,8 @@ export default function GamePage() {
                 <div className="flex justify-between pt-2 border-t border-gray-200">
                   <span className="text-gray-600 font-semibold">Total Value:</span>
                   <span
-                    className={`font-bold text-lg ${
-                      totalPnL >= 0 ? 'text-profit' : 'text-loss'
-                    }`}
+                    className={`font-bold text-lg ${totalPnL >= 0 ? 'text-profit' : 'text-loss'
+                      }`}
                   >
                     ₹{totalValue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
@@ -362,7 +358,7 @@ export default function GamePage() {
               <div className="bg-white rounded-lg shadow-md p-4 text-center">
                 <h3 className="font-bold mb-2">Room QR Code</h3>
                 <div className="flex justify-center">
-                  <QRCodeSVG value={`${typeof window !== 'undefined' ? window.location.origin : ''}/game/${roomCode}`} />
+                  <QRCode value={`${typeof window !== 'undefined' ? window.location.origin : ''}/game/${roomCode}`} />
                 </div>
                 <p className="text-sm text-gray-600 mt-2">Scan to join</p>
               </div>
