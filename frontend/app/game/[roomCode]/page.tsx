@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket'
+import { Time } from 'lightweight-charts'
 import Chart from '@/components/Chart'
 import Leaderboard from '@/components/Leaderboard'
 import QRCode from 'react-qr-code'
@@ -202,8 +203,8 @@ export default function GamePage() {
                       key={stock}
                       onClick={() => setSelectedSymbol(stock)}
                       className={`px-4 py-2 rounded-lg font-semibold transition-all ${selectedSymbol === stock
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                         }`}
                     >
                       {stock}
